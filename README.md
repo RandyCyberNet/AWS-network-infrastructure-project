@@ -9,7 +9,7 @@ A secure, scalable cloud network architecture for a small-to-medium organization
   - [Planned or Future Implementations](#planned-future-implementations)
 - [Architecture](#architecture)
 - [Walkthrough](#walkthrough-screenshots)
-  - [1. AWS Organizations & OUs](#1-aws-organizations--ous)
+  - [1. AWS Organizations, Organizational Units, and Access](#1-aws-organizations--ous)
   - [2. VPC, Subnets, Routing](#2-vpc-subnets-routing)
   - [3. Edge Delivery: Route 53 + CloudFront + WAF](#3-edge-delivery-route-53--cloudfront--waf)
   - [4. Application Tier: ALB + EC2](#4-application-tier-alb--ec2)
@@ -147,6 +147,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
 ![Fleet Manager](images/resources/fleetManager.png)
+![SSM History](images/resources/SSMHistory.png)
 
 
 
@@ -159,10 +160,27 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ## 3. Edge Delivery: Route 53 + CloudFront + WAF
 
-![AWS Organizations & OUs](images/resources/AWSorganization.png)
+### CloudFront & DNS Records
+
+![CloudFront](images/resources/Cloudfront.png)
+
+![DNS Records](images/resources/DNSrecords.png)
+
+
 
 
 ## 4. Application Tier: ALB + EC2
+
+### EC2 Instances & Security Groups
+![EC2 Main Instance](images/resources/EC2webapp.png)
+![EC2 Back-up Instance](images/resources/EC2bakwebapp.png)
+![EC2 Inbound Security Groups](images/resources/EC2inboundSG.png)
+![EC2 Outbound Security Groups](images/resources/EC2outboundSG.png)
+
+### Application Load Balancer & Security Groups
+![DNS Records](images/resources/DNSrecords.png)
+![DNS Records](images/resources/DNSrecords.png)
+![DNS Records](images/resources/DNSrecords.png)
 
 
 ## 5. Data Layer: RDS + S3 + ElastiCache
