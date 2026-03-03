@@ -151,21 +151,25 @@ This project documents both the **current implemented AWS foundation** and the *
 
 
 
-## 2. VPC, Subnets, Routing
+## 2. VPC, Subnets, Routing, SG
 
 ![AWS VPC](images/resources/myvpc.png)
 ![Subnets](images/resources/allsubnets.png)
+![All Security groups](images/resources/allSGs.png)
 ![Route Tables](images/resources/allRouteTables.png)
+
 
 
 ## 3. Edge Delivery: Route 53 + CloudFront + WAF
 
-### CloudFront & DNS Records
-
+### CloudFront 
 ![CloudFront](images/resources/Cloudfront.png)
 
+### DNS Record
 ![DNS Records](images/resources/DNSrecords.png)
 
+### Working website with https
+![Website](images/resources/WorkingTLSWebsite.png)
 
 
 
@@ -178,16 +182,48 @@ This project documents both the **current implemented AWS foundation** and the *
 ![EC2 Outbound Security Groups](images/resources/EC2outboundSG.png)
 
 ### Application Load Balancer & Security Groups
-![DNS Records](images/resources/DNSrecords.png)
-![DNS Records](images/resources/DNSrecords.png)
-![DNS Records](images/resources/DNSrecords.png)
+![Application Load Balancer](images/resources/ALB.png)
+![ALB Inbound Security Group](images/resources/ALBinboundSG.png)
+![ALB Outbound Security Group](images/resources/ALBoutboundSG.png)
 
 
 ## 5. Data Layer: RDS + S3 + ElastiCache
 
+### AWS RDS (Databases)
+![Databases](images/resources/allDBS.png)
+![DNS Records](images/resources/ALB.png)
+![EC2 Connection to PostgreSQL](images/resources/proofconnectionToDBS.png)
+#### maybe add SG
+
+
+### AWS S3 Buckets
+![S3 Buckets](images/resources/allBuckets.png)
+
+-example of one of the policies created for putting objects only, used for the lambda function
+![S3 example policy](images/resources/proofS3policy.png)
+
+![S3 policy restricting access](images/resources/proofS3policy.png)
+#### maybe add SG
+
+
+
+### AWS ElastiCache using Redis OSS
+![ElastiCache](images/resources/ElastiCache.png)
+![ElastiCache Inbound Security Group](images/resources/ElastiCacheInboundSG.png)
+![EC2 Connection to Redis OSS](images/resources/proofconnectionToCache.png)
+#### maybe add SG
+
+
 
 ## 6. Automation: EventBridge + Lambda - In Progress
 
+![Event Bridge, created schedule](images/resources/Eventbridgeschedule.png)
+
+
 ## 7. Monitoring & Audit - Planned Enhancements
+
+- note some resources and instances already have monitoring and logging enabled, however, the idea is to create a more centralized location of all auditing, monitoiring, troubleshooting and security actions
+![DNS Records](images/resources/ALB.png)
+
 
 ## Future Enhancements
