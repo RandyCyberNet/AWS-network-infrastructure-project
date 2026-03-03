@@ -252,8 +252,9 @@ This screenshot shows the **OU structure** and the initial accounts created to s
 - **Shared Network Services** account used for shared infrastructure components (networking/security foundations).
 - A single administrative identity (**A.Randy.multi**) is used instead of relying on the root user for day-to-day work (aligned with AWS best practices).
 
-### Systems Manager access (why I used it)
+---
 
+### Systems Manager access (why I used it)
 ![Fleet Manager](images/resources/fleetManager.png)
 ![SSM History](images/resources/SSMHistory.png)
 I chose **AWS Systems Manager** to centralize instance management and reduce exposure from direct admin access methods (e.g., inbound SSH/RDP). Key reasons:
@@ -262,9 +263,10 @@ I chose **AWS Systems Manager** to centralize instance management and reduce exp
 - Improves **auditability** by recording who accessed which instance and when.
 - Supports **patch management** and operational tasks from a centralized console/workflow.
 
+---
 
-![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
 ### VPC Endpoint Security Group (SSM connectivity)
+![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
 This screenshot also includes the **Security Group** for the Systems Manager VPC Endpoint:
 - **Inbound HTTPS (443)** is permitted from within the VPC to allow managed instances to communicate with Systems Manager through the endpoint.
 - In a production environment, this rule would be tightened to allow traffic only from the specific **instance security groups** and/or **subnets** that require Systems Manager access, rather than the entire VPC CIDR range.
