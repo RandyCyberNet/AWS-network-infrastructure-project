@@ -5,8 +5,8 @@ A secure, scalable cloud network architecture for a small-to-medium organization
 ## Table of Contents
 - [Project Overview & Scenario](#project-overview-scenario)
 - [Implemented vs Planned](#implemented-vs-planned-current-state-vs-target-state)
-  - [✅ Implemented (Current State)](#implemented-currently)
-  - [🧩 Planned / Future Implementations (Target State Enhancements)](#planned-future-implementations)
+  - [Implemented (Current State)](#implemented-currently)
+  - [Planned / Future Implementations (Target State Enhancements)](#planned-future-implementations)
 - [Architecture](#architecture)
 - [Walkthrough (Screenshots)](#walkthrough-screenshots)
   - [1. AWS Organizations & OUs](#1-aws-organizations--ous)
