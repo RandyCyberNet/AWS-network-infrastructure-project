@@ -204,7 +204,6 @@ This project documents both the **current implemented AWS foundation** and the *
 ![S3 example policy](images/resources/proofS3policy.png)
 
 ![S3 policy restricting access](images/resources/proofS3policy.png)
-#### maybe add SG
 
 
 
