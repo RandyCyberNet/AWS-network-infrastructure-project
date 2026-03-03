@@ -169,7 +169,7 @@ This project documents both the **current implemented AWS foundation** and the *
 ![DNS Records](images/resources/DNSrecords.png)
 
 ### Working website with https
-![Website](images/resources/WorkingTLSWebsite.png)
+![Website](images/resources/WokringTLSWebsite.png)
 
 
 
@@ -217,7 +217,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ## 6. Automation: EventBridge + Lambda - In Progress
 
-![Event Bridge, created schedule](images/resources/Eventbridgeschedule.png)
+![Event Bridge, created schedule](images/resources/Evenbridgeschedule.png)
 
 
 ## 7. Monitoring & Audit - Planned Enhancements
