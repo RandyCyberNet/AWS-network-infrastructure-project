@@ -337,15 +337,31 @@ Route tables were created and associated per subnet tier to support intended tra
 
 ## 3. Edge Delivery: Route 53 + CloudFront + WAF
 
-### CloudFront 
+### CloudFront (edge delivery) 
 ![CloudFront](images/resources/Cloudfront.png)
+This screenshot shows the **CloudFront distribution** created for the project and confirmation that a **custom SSL/TLS certificate** is attached for the domain **`testmyprojectvpc.click`**.
 
-### DNS Record
+**Why CloudFront**
+- **Performance & scale:** provides global edge caching and improved content delivery as the SaaS expands to more users/regions.
+- **Security at the edge:** adds a protective layer in front of the application that helps absorb/mitigate DDoS events and supports attaching **AWS WAF** for web request filtering.
+- **Origin protection:** CloudFront helps reduce direct exposure of the origin by keeping the public entry point at the edge and limiting how/when the origin is accessed.
+- **Strong encryption:** enforces HTTPS and modern TLS for user connections.
+
+---
+
+### DNS (Route 53)
 ![DNS Records](images/resources/DNSrecords.png)
+This screenshot shows the **Route 53 DNS records** used to connect AWS services to the custom domain.  
+- Alias records are used to route the domain to **CloudFront** and supporting service endpoints (such as the ALB where applicable).
 
-### Working website with https
+---
+
+### Working website HTTPS validation
 ![Website](images/resources/WokringTLSWebsite.png)
-
+This screenshot confirms:
+- The domain is reachable using **HTTPS**
+- The TLS certificate is valid
+- The page loads successfully (currently hosting portfolio content)
 
 
 ## 4. Application Tier: ALB + EC2
