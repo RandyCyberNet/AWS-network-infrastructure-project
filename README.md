@@ -124,6 +124,8 @@ This project documents both the **current implemented AWS foundation** and the *
 
 
 ## Architecture
+## Network Topology
+### Part 1
 ![Network Topology Part 1](images/network/OUs.png)
 ![Network Topology Part 2](images/network/model1.png)
 
