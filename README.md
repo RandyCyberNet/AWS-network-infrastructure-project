@@ -273,11 +273,64 @@ This screenshot also includes the **Security Group** for the Systems Manager VPC
 
 ## 2. VPC, Subnets, Routing, SG
 
+### VPC (addressing plan)
 ![AWS VPC](images/resources/myvpc.png)
-![Subnets](images/resources/allsubnets.png)
-![All Security groups](images/resources/allSGs.png)
-![Route Tables](images/resources/allRouteTables.png)
+This screenshot shows the VPC created for the project: **`my-vpc-project-vpc`** with CIDR **`11.0.0.0/16`**.
 
+**Why this CIDR range**
+- A `/16` provides enough address space to support multiple subnet tiers and future growth.
+- Using `11.x.x.x` is an intentional convention so additional VPCs can follow a predictable pattern (e.g., `12.0.0.0/16`, `13.0.0.0/16`) as the organization expands.
+
+---
+
+### Subnets (segmentation across 2 AZs)
+![Subnets](images/resources/allsubnets.png)
+The VPC is segmented across **two Availability Zones** with **2 public subnets** and **6 private subnets**.
+**Public subnets** (small address space because they host only edge networking resources)
+- `11.0.6.0/28` (AZ A)
+- `11.0.7.0/28` (AZ B)
+
+**Why /28 for public subnets**
+- Public subnets are used primarily for components like NAT/ALB networking and do not require large host capacity.
+
+**Private subnets** (larger address space for application/data growth)
+- **Application/EC2 tier**
+  - `11.0.0.0/24` (AZ A)
+  - `11.0.1.0/24` (AZ B)
+- **Web application database tier (RDS)**
+  - `11.0.2.0/24` (AZ A)
+  - `11.0.3.0/24` (AZ B)
+- **Business operations database tier (RDS)**
+  - `11.0.4.0/24` (AZ A)
+  - `11.0.5.0/24` (AZ B)
+
+**Why /24 for private subnets**
+- `/24` provides sufficient IP capacity for scaling instances and services without needing frequent subnet redesign.
+
+---
+
+### Security Groups (least privilege boundaries)
+![All Security groups](images/resources/allSGs.png)
+This screenshot shows the Security Groups created to segment access between tiers, including:
+- EC2 (application tier)
+- RDS (web application and business operations)
+- ElastiCache (Redis)
+- Application Load Balancer (ALB)
+- VPC Endpoint / Systems Manager endpoint security group
+- (Planned/unused) CloudFront VPC Origin security group
+
+**Why this matters**
+- Security Groups enforce **tier-to-tier access** (e.g., EC2 can reach RDS/Redis, but those services are not open broadly to other subnets/services).
+
+---
+
+### Route tables (controlled traffic flow)
+![Route Tables](images/resources/allRouteTables.png)
+Route tables were created and associated per subnet tier to support intended traffic flows, including:
+- **Private-to-private routing** (application tier to data tier, e.g., EC2 → RDS/ElastiCache)
+- **Private subnet egress via NAT Gateway** where outbound internet access is required (e.g., OS updates, package/template retrieval)
+
+> Note: Routes are scoped by subnet role to avoid giving all subnets unrestricted internet paths.
 
 
 ## 3. Edge Delivery: Route 53 + CloudFront + WAF
