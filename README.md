@@ -241,17 +241,35 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 
 
 ## 1. AWS Organizations, Organizational Units, and Access
-![AWS Organizations & OUs](images/resources/AWSorganization.png)
 
+### AWS Organizations (OUs + accounts)
+![AWS Organizations & OUs](images/resources/AWSorganization.png)
 ![AWS Access Portal For New User](images/resources/AWSaccessportal.png)
 ![New User created with admin permissions](images/resources/ARandyMultiUser.png)
 
+This screenshot shows the **OU structure** and the initial accounts created to support separation of duties and least privilege:
+- **Management (MGMT)** account (Randal group) used for organization-level administration and governance.
+- **Shared Network Services** account used for shared infrastructure components (networking/security foundations).
+- A single administrative identity (**A.Randy.multi**) is used instead of relying on the root user for day-to-day work (aligned with AWS best practices).
 
-![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
+### Systems Manager access (why I used it)
+
 ![Fleet Manager](images/resources/fleetManager.png)
 ![SSM History](images/resources/SSMHistory.png)
+I chose **AWS Systems Manager** to centralize instance management and reduce exposure from direct admin access methods (e.g., inbound SSH/RDP). Key reasons:
+- **Just-in-time node access and oversight:** access can be granted only when needed, and session activity can be monitored/recorded (e.g., visibility into interactive access and commands executed during a session).
+- **Session Manager** enables secure interactive access without opening inbound management ports.
+- Improves **auditability** by recording who accessed which instance and when.
+- Supports **patch management** and operational tasks from a centralized console/workflow.
 
 
+![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
+### VPC Endpoint Security Group (SSM connectivity)
+This screenshot also includes the **Security Group** for the Systems Manager VPC Endpoint:
+- **Inbound HTTPS (443)** is permitted from within the VPC to allow managed instances to communicate with Systems Manager through the endpoint.
+- In a production environment, this rule would be tightened to allow traffic only from the specific **instance security groups** and/or **subnets** that require Systems Manager access, rather than the entire VPC CIDR range.
+
+> Note: Session Manager activity is also logged for accountability.
 
 ## 2. VPC, Subnets, Routing, SG
 
