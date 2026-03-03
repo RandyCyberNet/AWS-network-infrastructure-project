@@ -142,6 +142,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ## 1. AWS Organizations & OUs
 
+
 ## 2. VPC, Subnets, Routing
 
 
