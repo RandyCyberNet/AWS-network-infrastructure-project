@@ -127,6 +127,8 @@ This section highlights how I used **AWS Organizations** to separate environment
 
 ### Network Topology Part 1
 
+![Network Topology Part 1](images/network/OUs.png)
+
 - **Security OU** – Dedicated area for testing and validating security tooling and security-related configurations.
 - **Infrastructure OU** – Accounts used to build and manage core cloud infrastructure (networking, shared services, baseline resources).
 - **Sandbox OU** – Safe space for experimenting with AWS services and proofs-of-concept without impacting core environments.
@@ -138,10 +140,12 @@ This section highlights how I used **AWS Organizations** to separate environment
 - **Deployments OU** – Accounts used to test, validate and roll out infrastructure changes in a controlled way.
 - **Transition OU** – Temporary staging for onboarding external/temporary accounts (e.g., contractors) or newly provisioned accounts before being moved to their final OU.
 
-![Network Topology Part 1](images/network/OUs.png)
-
+---
 
 ### Network Topology Part 2
+
+![Network Topology Part 2](images/network/model1.png)
+
 This section describes the **core VPC network layout** in **us-east-1**, designed to support a growing SaaS environment with **segmentation**, **least privilege**, and a clear path to **high availability**.
 
 > **Important note on scope:** The diagram includes some **target-state components** (e.g., Transit Gateway + Site-to-Site VPN, full database redundancy, S3 Access Points). These are shown for future expansion but are **not all implemented** in the current build.
@@ -189,7 +193,10 @@ This section describes the **core VPC network layout** in **us-east-1**, designe
 - **ElastiCache (Redis OSS) Serverless** is implemented as the caching layer.
 - Connectivity was validated by connecting from a private EC2 instance in the same region/VPC environment.
 - Because it is **serverless**, it is AWS-managed and not hosted in my own private subnets.
-
+- **Lookup intent (as shown in the diagram):**
+1. The web application on **EC2 queries the cache first** for an IOC match (**1**) to return results with low latency.
+2. If the IOC is **not found in cache**, the application **falls back to Amazon RDS** to retrieve the record (**2**).
+3. Then can optionally write the result back to cache for faster future lookups (**3**).
 ---
 
 ### Business operations data tier
@@ -210,12 +217,22 @@ This section describes the **core VPC network layout** in **us-east-1**, designe
 - **EventBridge + Lambda (in progress)** are included to support scheduled ingestion of threat intelligence (IOC retrieval). The schedule and function are created, but full ingestion logic is not yet complete.
 
 ---
-![Network Topology Part 2](images/network/model1.png)
 
 
 ### Future Model Example
 ![Future Model Example](images/network/model2.png)
-- using VPC Origin will allow for bettere secuirty, and allow Amazon CloudFront to deliver content from applications in private AWS subnets. Eliminates the need for public-facing load balancers, NAT gateways, or complex firewall rules.
+
+Model 2 represents the original target design for this project. It replaces the NAT-based approach with a **CloudFront VPC Origin** to improve security posture by keeping the application origin fully private.
+
+### Why VPC Origin (Model 2)
+- Allows **CloudFront** to deliver content from applications hosted in **private subnets** (via an internal ALB/NLB origin).
+- Reduces public exposure by keeping the origin **non-internet-facing** (no direct public access to the load balancer or instances).
+- Can simplify the edge-to-origin security model by limiting origin access to CloudFront (rather than broad public ingress patterns).
+
+### Why it is planned (not implemented in this phase)
+Model 2 was deferred to keep project cost lower during the initial build. The current implementation uses a NAT-based approach where required, while Model 2 remains the preferred hardening path as the environment matures.
+
+> All other components remain the same; Model 2 primarily changes how CloudFront reaches the application origin.
 
 
 ## Walkthrough
