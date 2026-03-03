@@ -8,14 +8,14 @@ A secure, scalable cloud network architecture for a small-to-medium organization
   - [Implemented Currently](#implemented-currently)
   - [Planned or Future Implementations](#planned-future-implementations)
 - [Architecture](#architecture)
-- [Walkthrough (Screenshots)](#walkthrough-screenshots)
+- [Walkthrough](#walkthrough-screenshots)
   - [1. AWS Organizations & OUs](#1-aws-organizations--ous)
   - [2. VPC, Subnets, Routing](#2-vpc-subnets-routing)
   - [3. Edge Delivery: Route 53 + CloudFront + WAF](#3-edge-delivery-route-53--cloudfront--waf)
   - [4. Application Tier: ALB + EC2](#4-application-tier-alb--ec2)
   - [5. Data Layer: RDS + S3 + ElastiCache](#5-data-layer-rds--s3--elasticache)
-  - [6. Automation: EventBridge + Lambda (In Progress)](#6-automation-eventbridge--lambda-in-progress)
-  - [7. Monitoring & Audit (Planned Enhancements)](#7-monitoring--audit-planned-enhancements)
+  - [6. Automation: EventBridge + Lambda - In Progress](#6-automation-eventbridge--lambda-in-progress)
+  - [7. Monitoring & Audit - Planned Enhancements](#7-monitoring--audit-planned-enhancements)
 - [Future Enhancements](#future-enhancements)
 
 ---
@@ -119,3 +119,36 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ### Private-origin hardening (cost vs security model)
 - Implement the **CloudFront VPC Origin model** (private origin access) as a future improvement; current build uses **NAT** for cost reasons
+
+
+
+
+## Architecture
+![Network Topology Part 1](images/network/OUs.png)
+![Network Topology Part 2](images/network/model1.png)
+
+![Future Model Example](images/network/model2.png)
+- using VPC Origin will allow for bettere secuirty, and allow Amazon CloudFront to deliver content from applications in private AWS subnets. Eliminates the need for public-facing load balancers, NAT gateways, or complex firewall rules.
+
+
+## Walkthrough
+
+
+## 1. AWS Organizations & OUs
+
+## 2. VPC, Subnets, Routing
+
+
+## 3. Edge Delivery: Route 53 + CloudFront + WAF
+
+## 4. Application Tier: ALB + EC2
+
+
+## 5. Data Layer: RDS + S3 + ElastiCache
+
+
+## 6. Automation: EventBridge + Lambda - In Progress
+
+## 7. Monitoring & Audit - Planned Enhancements
+
+## Future Enhancements
