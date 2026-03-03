@@ -124,9 +124,24 @@ This project documents both the **current implemented AWS foundation** and the *
 
 
 ## Architecture
+This section highlights how I used **AWS Organizations** to separate environments and responsibilities to support **least privilege**, reduce blast radius, and prepare for **future growth**. The goal is to enforce clear boundaries between security, infrastructure, and workload teams as the SaaS scales.
 
 ### Network Topology Part 1
+
+- **Security OU** – Dedicated area for testing and validating security tooling and security-related configurations.
+- **Infrastructure OU** – Accounts used to build and manage core cloud infrastructure (networking, shared services, baseline resources).
+- **Infrastructure Admins OU** – Privileged administration accounts scoped specifically for infrastructure management and operational tasks.
+- **Workloads OU** – Accounts dedicated to the SaaS build lifecycle (development, testing, and eventually production workloads).
+- **Sandbox OU** – Safe space for experimenting with AWS services and proofs-of-concept without impacting core environments.
+- **Management (MGMT) OU** – Centralized management functions (governance/administrative oversight).
+- **Policy Staging OU** – A controlled place to test policies/guardrails before rolling them out more broadly.
+- **Suspended OU** – Used to restrict or quarantine accounts/users (access removal or containment use case).
+- **Business Operations / Users OU** – Accounts for non-infrastructure business users (e.g., analysts) that need access to metrics/insights, with scoped permissions.
+- **Deployments OU** – Accounts used to validate and roll out infrastructure changes in a controlled way.
+- **Transition OU** – Temporary staging for onboarding external/temporary accounts (e.g., contractors) or newly provisioned accounts before being moved to their final OU.
+
 ![Network Topology Part 1](images/network/OUs.png)
+
 
 ### Network Topology Part 2
 ![Network Topology Part 2](images/network/model1.png)
