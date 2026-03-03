@@ -141,7 +141,7 @@ This section highlights how I used **AWS Organizations** to separate environment
 - **Transition OU** – Temporary staging for onboarding external/temporary accounts (e.g., contractors) or newly provisioned accounts before being moved to their final OU.
 
 ---
-
+<br>
 ### Network Topology Part 2
 
 ![Network Topology Part 2](images/network/model1.png)
@@ -217,8 +217,7 @@ This section describes the **core VPC network layout** in **us-east-1**, designe
 - **EventBridge + Lambda (in progress)** are included to support scheduled ingestion of threat intelligence (IOC retrieval). The schedule and function are created, but full ingestion logic is not yet complete.
 
 ---
-
-
+<br>
 ### Future Model Example
 ![Future Model Example](images/network/model2.png)
 
@@ -234,7 +233,8 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 
 > All other components remain the same; Model 2 primarily changes how CloudFront reaches the application origin.
 
-
+<br>
+<br>
 ## Walkthrough
 
 
