@@ -37,7 +37,7 @@ This project is primarily focused on **learning and demonstrating AWS best pract
 This project documents both the **current implemented AWS foundation** and the **target-state architecture** for a growing threat-intelligence SaaS. The infrastructure is functional and designed for future expansion, even though not all target services are deployed yet.
 
 
-## ✅ Implemented (Current State)
+## Implemented (Current State)
 
 ### Governance & access
 - **AWS Organizations** created with **OU separation** to support environment/team isolation
@@ -89,7 +89,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ---
 
-## 🧩 Planned / Future Implementations (Target State Enhancements)
+## Planned / Future Implementations (Target State Enhancements)
 
 ### Landing zone standardization
 - **AWS Control Tower**: automate account baselines/guardrails and streamline multi-account management
