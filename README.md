@@ -5,8 +5,8 @@ A secure, scalable cloud network architecture for a small-to-medium organization
 ## Table of Contents
 - [Project Overview & Scenario](#project-overview-scenario)
 - [Implemented vs Planned](#implemented-vs-planned-current-state-vs-target-state)
-  - [Implemented (Current State)](#implemented-currently)
-  - [Planned / Future Implementations (Target State Enhancements)](#planned-future-implementations)
+  - [Implemented Currently](#implemented-currently)
+  - [Planned or Future Implementations](#planned-future-implementations)
 - [Architecture](#architecture)
 - [Walkthrough (Screenshots)](#walkthrough-screenshots)
   - [1. AWS Organizations & OUs](#1-aws-organizations--ous)
@@ -37,7 +37,7 @@ This project is primarily focused on **learning and demonstrating AWS best pract
 This project documents both the **current implemented AWS foundation** and the **target-state architecture** for a growing threat-intelligence SaaS. The infrastructure is functional and designed for future expansion, even though not all target services are deployed yet.
 
 
-## Implemented (Current State)
+## Implemented Currently
 
 ### Governance & access
 - **AWS Organizations** created with **OU separation** to support environment/team isolation
@@ -89,7 +89,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ---
 
-## Planned / Future Implementations (Target State Enhancements)
+## Planned or Future Implementations
 
 ### Landing zone standardization
 - **AWS Control Tower**: automate account baselines/guardrails and streamline multi-account management
