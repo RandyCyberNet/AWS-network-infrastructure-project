@@ -193,7 +193,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ### AWS RDS (Databases)
 ![Databases](images/resources/allDBS.png)
-![Database inbound rule](images/resources/DBinbound.png)
+![Database inbound rule](images/resources/DBinboundSG.png)
 ![EC2 Connection to PostgreSQL](images/resources/proofconnectionToDBS.png)
 
 
