@@ -71,12 +71,12 @@ This project documents both the **current implemented AWS foundation** and the *
 - Connectivity validated by successfully connecting from a **private EC2 instance** in the same region/VPC environment
 
 ### Data & storage separation
-- **4 Amazon RDS databases** deployed in private subnets, separated by function:
-  - **2 RDS** for the **web application** workload (EC2/webapp tier)
-  - **2 RDS** for **business operations** (internal ops + future log/security data use cases)
+- **2 Amazon RDS databases** deployed in private subnets, separated by function:
+  - **1 RDS** for the **web application** workload (EC2/webapp tier)
+  - **1 RDS** for **business operations** (internal ops + future log/security data use cases)
 - **4 S3 buckets** deployed, separated by function:
-  - **2 buckets** aligned to **web application** storage needs
-  - **2 buckets** aligned to **business operations** and **future log/security storage**
+  - **2 buckets** aligned to **web application** storage needs, 1 main bucket and 1 for back-up/redundancy
+  - **2 buckets** aligned to **business operations** and **future log/security storage**, 1 main bucket and 1 for back-up/redundancy
 - **S3 policies and scoped permissions** applied to prevent broad bucket access across workloads (foundation for future S3 Access Points)
 
 ### Automation (partial)
@@ -185,15 +185,16 @@ This project documents both the **current implemented AWS foundation** and the *
 ![Application Load Balancer](images/resources/ALB.png)
 ![ALB Inbound Security Group](images/resources/ALBinboundSG.png)
 ![ALB Outbound Security Group](images/resources/ALBoutboundSG.png)
+![Target Groups For ALB](images/resources/TargetGroupsForALB.png)
+
 
 
 ## 5. Data Layer: RDS + S3 + ElastiCache
 
 ### AWS RDS (Databases)
 ![Databases](images/resources/allDBS.png)
-![DNS Records](images/resources/ALB.png)
+![Database inbound rule](images/resources/DBinbound.png)
 ![EC2 Connection to PostgreSQL](images/resources/proofconnectionToDBS.png)
-#### maybe add SG
 
 
 ### AWS S3 Buckets
@@ -211,7 +212,6 @@ This project documents both the **current implemented AWS foundation** and the *
 ![ElastiCache](images/resources/ElastiCache.png)
 ![ElastiCache Inbound Security Group](images/resources/ElastiCacheInboundSG.png)
 ![EC2 Connection to Redis OSS](images/resources/proofconnectionToCache.png)
-#### maybe add SG
 
 
 
