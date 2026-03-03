@@ -124,11 +124,15 @@ This project documents both the **current implemented AWS foundation** and the *
 
 
 ## Architecture
-## Network Topology
-### Part 1
+
+### Network Topology Part 1
 ![Network Topology Part 1](images/network/OUs.png)
+
+### Network Topology Part 2
 ![Network Topology Part 2](images/network/model1.png)
 
+
+### Future Model Example
 ![Future Model Example](images/network/model2.png)
 - using VPC Origin will allow for bettere secuirty, and allow Amazon CloudFront to deliver content from applications in private AWS subnets. Eliminates the need for public-facing load balancers, NAT gateways, or complex firewall rules.
 
