@@ -140,13 +140,27 @@ This project documents both the **current implemented AWS foundation** and the *
 ## Walkthrough
 
 
-## 1. AWS Organizations & OUs
+## 1. AWS Organizations, Organizational Units, and Access
+![AWS Organizations & OUs](images/resources/AWSorganization.png)
+
+![AWS Access Portal For New User](images/resources/AWSaccessportal.png)
+
+![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
+![Fleet Manager](images/resources/fleetManager.png)
+
 
 
 ## 2. VPC, Subnets, Routing
 
+![AWS VPC](images/resources/myvpc.png)
+![Subnets](images/resources/allsubnets.png)
+![Route Tables](images/resources/allRouteTables.png)
+
 
 ## 3. Edge Delivery: Route 53 + CloudFront + WAF
+
+![AWS Organizations & OUs](images/resources/AWSorganization.png)
+
 
 ## 4. Application Tier: ALB + EC2
 
