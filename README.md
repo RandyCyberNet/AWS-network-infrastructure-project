@@ -244,6 +244,8 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 ![AWS Organizations & OUs](images/resources/AWSorganization.png)
 
 ![AWS Access Portal For New User](images/resources/AWSaccessportal.png)
+![New User created with admin permissions](images/resources/ARandyMultiUser.png)
+
 
 ![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
 ![Fleet Manager](images/resources/fleetManager.png)
