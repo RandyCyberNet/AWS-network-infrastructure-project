@@ -1,14 +1,27 @@
 # AWS-network-infrastructure-project
 A secure, scalable cloud network architecture for a small-to-medium organization, designed for future expansion and hybrid interoperability (cloud and on-premises). The design follows least-privilege access and a layered defense-in-depth security model.
 
-# Scenario
+
+## Table of Contents
+- [Project Overview & Scenario](#project-overview-scenario)
+- [Implemented vs Planned](#implemented-vs-planned-current-state-vs-target-state)
+  - [✅ Implemented (Current State)](#implemented-currently)
+  - [🧩 Planned / Future Implementations (Target State Enhancements)](#planned-future-implementations)
+- [Architecture](#architecture)
+- [Walkthrough (Screenshots)](#walkthrough-screenshots)
+  - [1. AWS Organizations & OUs](#1-aws-organizations--ous)
+  - [2. VPC, Subnets, Routing](#2-vpc-subnets-routing)
+  - [3. Edge Delivery: Route 53 + CloudFront + WAF](#3-edge-delivery-route-53--cloudfront--waf)
+  - [4. Application Tier: ALB + EC2](#4-application-tier-alb--ec2)
+  - [5. Data Layer: RDS + S3 + ElastiCache](#5-data-layer-rds--s3--elasticache)
+  - [6. Automation: EventBridge + Lambda (In Progress)](#6-automation-eventbridge--lambda-in-progress)
+  - [7. Monitoring & Audit (Planned Enhancements)](#7-monitoring--audit-planned-enhancements)
+- [Future Enhancements](#future-enhancements)
+
+---
+
+## Project Overview & Scenario 
 This project models a small (growing) US-based tech company building a threat-intelligence SaaS similar to Talos/VirusTotal. The goal is to implement a secure, scalable AWS foundation with hybrid-readiness for future expansion. While this repo does not deliver a full production application or complete threat-intel database, the core infrastructure is deployed, functional, and designed to support a full SaaS implementation.
-
-
-## Implemented vs Planned (Current State vs Target State)
-
-This project documents both the **current implemented AWS foundation** and the **target-state architecture** for a growing threat-intelligence SaaS. The infrastructure is functional and designed for future expansion, even though not all target services are deployed yet.
-
 
 ### NOTE
 Some components shown in the target-state design were intentionally **not implemented** in this phase to keep costs reasonable while still building a secure, scalable foundation. Services such as **Transit Gateway** and **Direct Connect Gateway** improve performance and hybrid scalability, but they are typically introduced when an organization grows, hybrid traffic increases, or measurable network bottlenecks appear.
@@ -18,6 +31,11 @@ For the same cost-conscious reasons, I did not implement higher-cost enhancement
 This project is primarily focused on **learning and demonstrating AWS best practices** by building a suitable cloud environment that supports **scalability, security, and business continuity** with a low initial operating cost. A more fully featured SaaS implementation (including complete ingestion, application logic, and production-grade hardening) is planned as a future phase.
 
 ---
+
+## Implemented vs Planned (Current State vs Target State)
+
+This project documents both the **current implemented AWS foundation** and the **target-state architecture** for a growing threat-intelligence SaaS. The infrastructure is functional and designed for future expansion, even though not all target services are deployed yet.
+
 
 ## ✅ Implemented (Current State)
 
