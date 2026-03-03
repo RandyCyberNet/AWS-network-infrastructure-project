@@ -122,7 +122,6 @@ This project documents both the **current implemented AWS foundation** and the *
 
 
 
-
 ## Architecture
 This section highlights how I used **AWS Organizations** to separate environments and responsibilities to support **least privilege**, reduce blast radius, and prepare for **future growth**. The goal is to enforce clear boundaries between security, infrastructure, and workload teams as the SaaS scales.
 
@@ -130,20 +129,87 @@ This section highlights how I used **AWS Organizations** to separate environment
 
 - **Security OU** – Dedicated area for testing and validating security tooling and security-related configurations.
 - **Infrastructure OU** – Accounts used to build and manage core cloud infrastructure (networking, shared services, baseline resources).
-- **Infrastructure Admins OU** – Privileged administration accounts scoped specifically for infrastructure management and operational tasks.
-- **Workloads OU** – Accounts dedicated to the SaaS build lifecycle (development, testing, and eventually production workloads).
 - **Sandbox OU** – Safe space for experimenting with AWS services and proofs-of-concept without impacting core environments.
 - **Management (MGMT) OU** – Centralized management functions (governance/administrative oversight).
-- **Policy Staging OU** – A controlled place to test policies/guardrails before rolling them out more broadly.
+- **Workloads OU** – Accounts dedicated to the SaaS build lifecycle (development, testing, and eventually production).
+- **Policy Staging OU** – A controlled place to test policies/guardrails (SCPs) before rolling them out more broadly.
 - **Suspended OU** – Used to restrict or quarantine accounts/users (access removal or containment use case).
-- **Business Operations / Users OU** – Accounts for non-infrastructure business users (e.g., analysts) that need access to metrics/insights, with scoped permissions.
-- **Deployments OU** – Accounts used to validate and roll out infrastructure changes in a controlled way.
+- **Individual Users OU** – Accounts for non-infrastructure business users (e.g., analysts) that need access to metrics/insights, with scoped permissions.
+- **Deployments OU** – Accounts used to test, validate and roll out infrastructure changes in a controlled way.
 - **Transition OU** – Temporary staging for onboarding external/temporary accounts (e.g., contractors) or newly provisioned accounts before being moved to their final OU.
 
 ![Network Topology Part 1](images/network/OUs.png)
 
 
 ### Network Topology Part 2
+This section describes the **core VPC network layout** in **us-east-1**, designed to support a growing SaaS environment with **segmentation**, **least privilege**, and a clear path to **high availability**.
+
+> **Important note on scope:** The diagram includes some **target-state components** (e.g., Transit Gateway + Site-to-Site VPN, full database redundancy, S3 Access Points). These are shown for future expansion but are **not all implemented** in the current build.
+
+---
+
+### Hybrid connectivity (Target State)
+- **Site-to-Site VPN → Transit Gateway (TGW)** is the planned hybrid entry point for on-prem or external enterprise networks.
+- TGW provides centralized routing and scalability for connecting additional VPCs as the environment grows.
+
+---
+
+### Region and availability design
+- The VPC is deployed in **us-east-1** across **two Availability Zones (AZs)** to support redundancy and fault tolerance.
+- Subnets are segmented by purpose (public ingress/egress vs private application vs private data).
+
+---
+
+### Public subnet layer (ingress/egress)
+- **Two public subnets** (one per AZ) support edge networking.
+- **NAT Gateway (implemented)** provides **outbound-only** internet access for private EC2 instances (e.g., OS updates, package/template retrieval).
+- **Application Load Balancer (ALB)** is placed in the public tier to distribute traffic to the private application tier (one ALB spanning both AZs).
+
+---
+
+### Private application tier
+- **Two private app subnets** (one per AZ) host EC2 instances:
+  - **Primary web application EC2** in one AZ
+  - **Secondary/backup EC2** in the other AZ
+- EC2 instances are not directly exposed to the internet; traffic reaches them through the ALB.
+
+---
+
+### Private data tier (web application data)
+- A dedicated set of private data subnets support **web application data services**, with access limited to the web application tier.
+- **RDS (web application databases)** are deployed in private subnets and are reachable only from the application tier via Security Groups.
+- **S3 buckets for the web application** are separated from business operations buckets, and access is controlled via **bucket policies/IAM**.
+- **VPC Gateway Endpoint** is used for private access to supported AWS services from workloads running inside the VPC (e.g., S3/DynamoDB depending on configuration).
+
+> **Note:** In the current implementation, **S3 Access Points are planned** (not implemented yet). Access separation is currently enforced with **IAM + bucket policies**.
+
+---
+
+### Caching layer
+- **ElastiCache (Redis OSS) Serverless** is implemented as the caching layer.
+- Connectivity was validated by connecting from a private EC2 instance in the same region/VPC environment.
+- Because it is **serverless**, it is AWS-managed and not hosted in my own private subnets.
+
+---
+
+### Business operations data tier
+- Separate **business operations RDS instances** and **business operations S3 buckets** are used to isolate internal/business workloads from the web application workload.
+- These buckets are intended for business data and future operational/security log storage (segmented storage model to reduce blast radius).
+
+---
+
+### Edge, DNS, and TLS
+- A custom domain is configured in **Route 53** using an **Alias record** that points to **CloudFront**.
+- **TLS certificates** are used to enable HTTPS for the SaaS entry point (CloudFront) and for origin communication where applicable.
+- **CloudFront + AWS WAF** provide an edge security layer to filter and protect user requests before they reach the application.
+
+---
+
+### Regional services used (implemented / in progress)
+- **AWS Systems Manager (SSM)** is used for secure administration and management of instances without requiring inbound SSH.
+- **EventBridge + Lambda (in progress)** are included to support scheduled ingestion of threat intelligence (IOC retrieval). The schedule and function are created, but full ingestion logic is not yet complete.
+
+---
 ![Network Topology Part 2](images/network/model1.png)
 
 
