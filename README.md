@@ -252,7 +252,7 @@ I plan to add **Amazon GuardDuty** for managed threat detection across the AWS e
 GuardDuty uses multiple data sources and detection techniques (including threat intelligence and anomaly-based detection) to generate actionable findings for investigation and response.
 Making it a sutible choice for threat detection in cloud environment.
 
-> These services are part of a future enhancement meant to improve our business continuity, while also strengthening the security and visibility of the organization.
+> These services are part of a future enhancement meant to improve business continuity, while also strengthening the security and visibility of the organization.
 
 ---
 
@@ -311,7 +311,7 @@ This screenshot also includes the **Security Group** for the Systems Manager VPC
 
 > Note: Session Manager activity is also logged for accountability.
 
-## 2. VPC, Subnets, Routing, SG
+## 2. VPC, Subnets, Endpoints, Routing, SG
 
 ### VPC (addressing plan)
 ![AWS VPC](images/resources/myvpc.png)
@@ -346,6 +346,24 @@ The VPC is segmented across **two Availability Zones** with **2 public subnets**
 
 **Why /24 for private subnets**
 - `/24` provides sufficient IP capacity for scaling instances and services without needing frequent subnet redesign.
+
+---
+
+### Endpoints & Interfaces
+![All Endpoints & Interfaces](images/resources/allEndpointsInterfaces.png)
+This screenshot shows **7 VPC endpoints** in the VPC. Some were created automatically by AWS as part of enabling/using certain services, and others were created intentionally to support private service access.
+
+### Gateway endpoint (S3)
+- **S3 Gateway VPC Endpoint** was created so resources inside the VPC (for example, private EC2 instances) can access **S3 buckets privately** without requiring internet routing for S3 traffic.
+- This supports a tighter security posture by keeping S3 access on AWS private networking paths.
+
+### Interface endpoints (Systems Manager)
+- **Systems Manager interface endpoints** were created to support private connectivity to Systems Manager services used for EC2 management (Session Manager, patching, and agent communication).
+- These interface endpoints deploy **ENIs (elastic network interfaces)** into the subnets, which means they consume private IP addresses in the subnet(s) where they are placed.
+- In this design, the endpoints are deployed into the private application subnets (e.g., `11.0.0.0/24` and `11.0.1.0/24`) so managed instances can reach SSM without exposing inbound management ports.
+
+> Note: Interface endpoints consume IPs because each endpoint creates one or more ENIs per subnet. This is one reason subnet sizing (e.g., /24 for private tiers) is useful for future growth.
+
 
 ---
 
