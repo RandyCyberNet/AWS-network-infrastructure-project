@@ -544,7 +544,7 @@ This separation supports least privilege by ensuring web application workflows d
 
 ---
 ### Bucket policies (least privilege enforcement)
-![S3 example policy](images/resources/proofS3JSON.png)
+![S3 example policy](images/resources/S3PolicyJSON.png)
 The second screenshot shows an example **S3 bucket policy** used to scope access by workload. In general, these policies are designed so that:
 - WebApp1 resources can interact only with the specific web application bucket(s) they need
 - Access to unrelated buckets (e.g., business operations buckets) is denied
