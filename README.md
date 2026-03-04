@@ -216,6 +216,46 @@ This section describes the **core VPC network layout** in **us-east-1**, designe
 
 ---
 
+### Audit, Logs, Monitor Services, compliance, Security Alerts
+
+These services are included in the target architecture to support **governance, auditability, operational monitoring, and threat detection** as the environment scales.
+
+#### AWS Config (configuration tracking)
+I plan to use **AWS Config** to record and evaluate **configuration changes** across AWS resources over time. This helps with:
+- visibility into “what changed” (and when) for key resources
+- drift detection against expected configurations
+- supporting compliance checks and troubleshooting when something breaks unexpectedly
+
+#### AWS CloudTrail (audit trail of AWS activity)
+I plan to use **AWS CloudTrail** to record **AWS API activity** (Console/CLI/SDK) across the environment. This supports:
+- auditing and compliance evidence
+- investigation workflows (who did what, from where, and when)
+- detecting suspicious administrative activity when paired with detections/alerts
+
+#### Amazon CloudWatch (operational monitoring)
+I use/plan to expand **Amazon CloudWatch** to provide a centralized place for:
+- service and instance health monitoring (metrics)
+- logs (e.g., application logs, Lambda logs, system logs where applicable)
+- alarms and notifications to support business continuity and faster incident response
+
+#### AWS Security Hub (centralized security findings)
+I plan to add **AWS Security Hub** to centralize security findings and posture signals in one place. This supports:
+- consolidated visibility into security alerts across services
+- tracking posture/compliance checks at scale
+- prioritizing remediation based on severity and account/workload context
+
+#### Amazon GuardDuty (managed threat detection)
+I plan to add **Amazon GuardDuty** for managed threat detection across the AWS environment. GuardDuty helps detect suspicious activity such as:
+- unusual API behavior and credential misuse
+- anomalous access patterns and potentially malicious activity involving AWS resources
+
+GuardDuty uses multiple data sources and detection techniques (including threat intelligence and anomaly-based detection) to generate actionable findings for investigation and response.
+Making it a sutible choice for threat detection in cloud environment.
+
+> These services are part of a future enhancement meant to improve our business continuity, while also strengthening the security and visibility of the organization.
+
+---
+
 ### Future Model Example
 ![Future Model Example](images/network/model2.png)
 
@@ -533,9 +573,51 @@ The final screenshot confirms successful connectivity from a private EC2 instanc
 
 ### Automation: EventBridge + Lambda - In Progress
 
+---
+
+### Scheduled automation (EventBridge)
 ![Event Bridge, created schedule](images/resources/Evenbridgeschedule.png)
+### Scheduled automation (EventBridge)
+The first screenshot shows an **EventBridge schedule** configured to run on a recurring basis (every **6 hours**).  
+I chose EventBridge because it provides a reliable way to trigger time-based automation without managing servers or cron jobs.
 
+**Why this matters**
+- EventBridge can be used for many operational tasks beyond ingestion, such as:
+  - initiating patching workflows
+  - running health checks
+  - triggering operational or security automation on a schedule
+Making sense to use it in testing than exposing it to a production setting.
 
-### Monitoring & Audit - Planned Enhancements
+---
 
-- note some resources and instances already have monitoring and logging enabled, however, the idea is to create a more centralized location of all auditing, monitoiring, troubleshooting and security actions
+### IOC ingestion function (Lambda) — in progress
+![lambda function](images/resources/lambdacodeSnipet.png)
+The second screenshot shows a Lambda code snippet intended to:
+- fetch IOCs from a trusted threat-intel source (e.g., AlienVault OTX)
+- store the retrieved data in the **`org-web1-s3`** bucket for the web application workflow
+
+**Why Lambda**
+- Lambda is lightweight and versatile for automation tasks such as:
+  - ingesting threat intelligence feeds
+  - transforming/normalizing data before storage
+  - forwarding logs/events to a centralized location
+  - triggering alerting workflows
+Making Lambda a versatile tool for most automotive use cases.
+> **Status:** The EventBridge rule and Lambda function exist, but the ingestion workflow is still in progress and not yet fully operational.
+
+---
+
+### Monitoring, auditing, and security posture — in progress
+Security and operational visibility is a key part of the target-state design. Many AWS services already generate useful telemetry by default (for example):
+- EC2 health checks and instance-level monitoring
+- Systems Manager session history/activity
+
+The next step is to **centralize logging and enable governance controls** so the environment can scale safely, including:
+- centralized log storage (single location for audit + troubleshooting)
+- detection and alerting for abnormal behavior
+- configuration compliance checks and guardrails
+Hence, the reason we went with the setup in the Architecture section which allows us to pull all our monitoring into one spot, and for threat intelligence detection. This helps us keep a closer eye on things and really strengthens our overall security posture
+
+As the organization grows, implementing **AWS Control Tower** helps establish this consistent governance baselines and guardrails across accounts, making it easier to scale compliance and security controls over time.
+
+> These monitoring/auditing/security services are planned enhancements and will be implemented incrementally as the project evolves.
