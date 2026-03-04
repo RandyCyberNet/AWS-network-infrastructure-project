@@ -280,7 +280,6 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 
 ## Walkthrough
 
----
 
 ## 1. AWS Organizations, Organizational Units, and Access
 
