@@ -85,7 +85,7 @@ This project documents both the **current implemented AWS foundation** and the *
 - This repository focuses on the **infrastructure foundation** (networking, routing, security controls, and managed service deployment).
 - While RDS and ElastiCache are deployed and reachable, the **application/database/cache logic** (schemas, query handling, cache key strategy, data access layer, request handling, etc.) is not yet implemented and will be developed in a future phase.
 
-
+---
 
 ## Planned or Future Implementations
 
@@ -316,7 +316,7 @@ This screenshot also includes the **Security Group** for the Systems Manager VPC
 
 ---
 
-##2. VPC, Subnets, Endpoints, Routing, SG
+## 2. VPC, Subnets, Endpoints, Routing, SG
 
 ### VPC (addressing plan)
 ![AWS VPC](images/resources/myvpc.png)
