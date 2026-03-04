@@ -87,6 +87,7 @@ This project documents both the **current implemented AWS foundation** and the *
 
 ---
 
+<a id="planned-future-implementations"></a>
 ## Planned or Future Implementations
 
 ### Landing zone standardization
