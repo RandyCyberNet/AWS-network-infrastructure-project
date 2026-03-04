@@ -146,7 +146,7 @@ This section highlights how I used **AWS Organizations** to separate environment
 
 This section describes the **core VPC network layout** in **us-east-1**, designed to support a growing SaaS environment with **segmentation**, **least privilege**, and a clear path to **high availability**.
 
-> **Important note on scope:** The diagram includes some **target-state components** (e.g., Transit Gateway + Site-to-Site VPN, full database redundancy, S3 Access Points). These are shown for future expansion but are **not all implemented** in the current build.
+> **Important note on scope:** The diagram includes some **target-state components** (e.g., Transit Gateway + Site-to-Site VPN, full database redundancy, S3 Access Points, AWS Control Tower, AWS CloudTrail, Config, CloudWatch, Security Hub, GuarDuty). These are shown for future expansion but are **not all implemented** in the current build.
 
 ---
 
