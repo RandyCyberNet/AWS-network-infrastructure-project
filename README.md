@@ -327,7 +327,7 @@ This screenshot shows the VPC created for the project: **`my-vpc-project-vpc`** 
 - A `/16` provides enough address space to support multiple subnet tiers and future growth.
 - Using `11.x.x.x` is an intentional convention so additional VPCs can follow a predictable pattern (e.g., `12.0.0.0/16`, `13.0.0.0/16`) as the organization expands.
 
----
+
 
 ### Subnets (segmentation across 2 AZs)
 ![Subnets](images/resources/allsubnets.png)
@@ -353,7 +353,7 @@ The VPC is segmented across **two Availability Zones** with **2 public subnets**
 **Why /24 for private subnets**
 - `/24` provides sufficient IP capacity for scaling instances and services without needing frequent subnet redesign.
 
----
+
 
 ### Endpoints & Interfaces
 ![All Endpoints & Interfaces](images/resources/allEndpointsInterfaces.png)
@@ -371,7 +371,6 @@ This screenshot shows **7 VPC endpoints** in the VPC. Some were created automati
 > Note: Interface endpoints consume IPs because each endpoint creates one or more ENIs per subnet. This is one reason subnet sizing (e.g., /24 for private tiers) is useful for future growth.
 
 
----
 
 ### Security Groups (least privilege boundaries)
 ![All Security groups](images/resources/allSGs.png)
@@ -386,7 +385,6 @@ This screenshot shows the Security Groups created to segment access between tier
 **Why this matters**
 - Security Groups enforce **tier-to-tier access** (e.g., EC2 can reach RDS/Redis, but those services are not open broadly to other subnets/services).
 
----
 
 ### Route tables (controlled traffic flow)
 ![Route Tables](images/resources/allRouteTables.png)
@@ -410,14 +408,14 @@ This screenshot shows the **CloudFront distribution** created for the project an
 - **Origin protection:** CloudFront helps reduce direct exposure of the origin (application node) by keeping the public entry point at the edge, limiting how/when the origin is accessed and restricitng the numer of requests a user can make to the website within a specific time frame.
 - **Strong encryption:** enforces HTTPS and modern TLS for user connections.
 
----
+
 
 ### DNS (Route 53)
 ![DNS Records](images/resources/DNSrecords.png)
 This screenshot shows the **Route 53 DNS records** used to connect AWS services to the custom domain.  
 - Alias records are used to route the domain to **CloudFront** and supporting service endpoints (such as the ALB).
 
----
+
 
 ### Working website HTTPS validation
 ![Website](images/resources/WokringTLSWebsite.png)
@@ -441,7 +439,7 @@ The second screenshot shows a **secondary EC2 instance** in **`11.0.1.0/24`** (s
 - The AMI was then used to launch the secondary instance as a consistent, repeatable “golden image” approach.
 > Note: This is a simple resilience method for a lab build. In a production SaaS, this would typically evolve into Auto Scaling, CI/CD image pipelines, and immutable deployments.
 
----
+
 
 ### Inbound traffic (from ALB only)
 ![EC2 Inbound Security Groups](images/resources/EC2inboundSG.png)
@@ -452,7 +450,7 @@ Inbound rules are scoped for **HTTP (port 80)** with the **source restricted to 
 - End-user traffic is still protected with **HTTPS at the edge (CloudFront/TLS)**.
 - This design keeps the internal communication simple while maintaining encrypted user-facing access.
 
----
+
 
 ### Outbound traffic (controlled egress)
 ![EC2 Outbound Security Groups](images/resources/EC2outboundSG.png)
@@ -465,14 +463,14 @@ Outbound rules are configured to allow only required destinations/services for t
 **Security note**
 - In a production environment, broad outbound internet access (`0.0.0.0/0`) should be reduced further (e.g., allowlisting, time-bound access, or a controlled patch/template pipeline). This aligns with the project roadmap to reduce direct internet dependency from application servers.
 
----
+
 
 ### Application Load Balancer & Security Groups
 ### ALB overview
 ![Application Load Balancer](images/resources/ALB.png)
 The first screenshot shows the Application Load Balancer **`ALB-webapp1`** and the **Availability Zones** it is associated with. Placing the ALB across multiple AZs supports higher availability and helps avoid single-AZ dependency.
 
----
+
 ### ALB inbound rules (HTTPS from CloudFront)
 ![ALB Inbound Security Group](images/resources/ALBinboundSG.png)
 The inbound rules are scoped to allow **HTTPS (443)** traffic **originating from CloudFront**.
@@ -483,7 +481,7 @@ The inbound rules are scoped to allow **HTTPS (443)** traffic **originating from
 
 > Note: In a hardened design, the ALB can be kept fully private and reachable only through CloudFront (e.g., VPC Origin model). This project documents that as a future enhancement.
 
----
+
 
 ### ALB outbound rules (HTTP to EC2 targets)
 ![ALB Outbound Security Group](images/resources/ALBoutboundSG.png)
@@ -493,7 +491,7 @@ Outbound rules allow the ALB to communicate with the backend EC2 instances over 
 - ALB → EC2 traffic remains inside the VPC.
 - TLS is enforced at the edge (CloudFront), while internal traffic is kept simple and controlled via Security Groups.
 
----
+
 
 ### Target group (where the ALB sends traffic)
 ![Target Groups For ALB](images/resources/TargetGroupsForALB.png)
@@ -515,7 +513,7 @@ The first screenshot shows the PostgreSQL RDS databases created for this project
 - In a full production environment, this design would typically be expanded to include additional databases (or clusters) to support workload separation (e.g., separate databases for each web application and for business operations, plus redundancy/DR controls).
 - For this phase, I implemented a smaller footprint to keep cost and scope reasonable while validating the core architecture.
 
----
+
 
 ### RDS security groups (least privilege access)
 ![Database inbound rule](images/resources/DBinboundSG.png)
@@ -527,7 +525,7 @@ The inbound rules for the web application database allow:
 - The database is not open to the VPC or the internet.
 - Only instances/services that are members of the `web-app1` security group can connect, which enforces least privilege at the network layer.
 
----
+
 ### Connectivity validation (EC2 → RDS using Systems Manager)
 ![EC2 Connection to PostgreSQL](images/resources/proofconnectionToDBS.png)
 The final screenshot confirms successful connectivity from the private EC2 instance to the private RDS database:
@@ -535,7 +533,7 @@ The final screenshot confirms successful connectivity from the private EC2 insta
 - From that session, I connected to RDS using this command:
 **psql -h <RDS-ENDPOINT> -U <USERNAME> -d <DATABASE_NAME>**
 
----
+
 
 ### S3 buckets (purpose and separation)
 ![S3 Buckets](images/resources/allBuckets.png)
@@ -551,7 +549,7 @@ The first screenshot shows **5 S3 buckets** in the account. One bucket was autom
 
 This separation supports least privilege by ensuring web application workflows do not require access to business operations storage and vice versa.
 
----
+
 ### Bucket policies (least privilege enforcement)
 ![S3 example policy](images/resources/S3PolicyJSON.png)
 The second screenshot shows an example **S3 bucket policy** used to scope access by workload. In general, these policies are designed so that:
@@ -563,7 +561,7 @@ The second screenshot shows an example **S3 bucket policy** used to scope access
 **Why I highlighted bucket listing in the example:**  
 In the screenshot example, I intentionally tested bucket listing to illustrate that **without explicit IAM and bucket policy controls**, a workload can end up with broader S3 visibility/access than intended. The policies in this project are therefore designed to **remove unnecessary S3 permissions** and keep access limited to the buckets required for the workload.
 
----
+
 
 ### Access validation (EC2 → S3)
 ![S3 example policy](images/resources/proofS3policy.png)
@@ -572,13 +570,13 @@ The final screenshot confirms that S3 access controls are working as intended:
 - From the instance, I used AWS CLI commands to verify access, for example I used this command:
 **aws s3 ls s3://org-web1-s3**
 
----
+
 
 ### ElastiCache (Redis OSS) overview
 ![ElastiCache](images/resources/ElastiCache.png)
 The first screenshot shows the **Redis OSS cache** and the subnet associations aligned to the private application tier (the same private subnets used by the EC2 instances). This keeps cache traffic internal to the VPC, reduces exposure and costs!
 
----
+
 ### Redis security group (restricted access)
 ![ElastiCache Inbound Security Group](images/resources/ElastiCacheInboundSG.png)
 The second screenshot shows the Redis security group rules:
@@ -587,7 +585,7 @@ The second screenshot shows the Redis security group rules:
 
 > From experience, it’s even cleaner to set the Redis inbound source to the **EC2 Security Group** instead of a CIDR range, so only the intended instances can connect even if subnets change.
 
----
+
 ### Connectivity validation (EC2 → Redis using Systems Manager)
 ![EC2 Connection to Redis OSS](images/resources/proofconnectionToCache.png)
 The final screenshot confirms successful connectivity from a private EC2 instance to Redis:
