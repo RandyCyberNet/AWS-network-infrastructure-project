@@ -10,7 +10,7 @@ A secure, scalable cloud network architecture for a small-to-medium organization
 - [Architecture](#architecture)
 - [Walkthrough](#walkthrough-screenshots)
   - [1. AWS Organizations, Organizational Units, and Access](#1-aws-organizations--ous)
-  - [2. VPC, Subnets, Routing](#2-vpc-subnets-routing)
+  - [2. VPC, Subnets, Endpoints, Routing, SG](#2-vpc-subnets-routing)
   - [3. Edge Delivery: Route 53 + CloudFront + WAF](#3-edge-delivery-route-53--cloudfront--waf)
   - [4. Application Tier: ALB + EC2](#4-application-tier-alb--ec2)
   - [5. Data Layer: RDS + S3 + ElastiCache](#5-data-layer-rds--s3--elasticache)
@@ -280,6 +280,7 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 
 ## Walkthrough
 
+---
 
 ## 1. AWS Organizations, Organizational Units, and Access
 
