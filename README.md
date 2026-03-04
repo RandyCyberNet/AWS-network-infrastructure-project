@@ -344,7 +344,7 @@ This screenshot shows the **CloudFront distribution** created for the project an
 **Why CloudFront**
 - **Performance & scale:** provides global edge caching and improved content delivery as the SaaS expands to more users/regions.
 - **Security at the edge:** adds a protective layer in front of the application that helps absorb/mitigate DDoS events and supports attaching **AWS WAF** for web request filtering.
-- **Origin protection:** CloudFront helps reduce direct exposure of the origin by keeping the public entry point at the edge and limiting how/when the origin is accessed.
+- **Origin protection:** CloudFront helps reduce direct exposure of the origin (application node) by keeping the public entry point at the edge, limiting how/when the origin is accessed and restricitng the numer of requests a user can make to the website within a specific time frame.
 - **Strong encryption:** enforces HTTPS and modern TLS for user connections.
 
 ---
@@ -352,7 +352,7 @@ This screenshot shows the **CloudFront distribution** created for the project an
 ### DNS (Route 53)
 ![DNS Records](images/resources/DNSrecords.png)
 This screenshot shows the **Route 53 DNS records** used to connect AWS services to the custom domain.  
-- Alias records are used to route the domain to **CloudFront** and supporting service endpoints (such as the ALB where applicable).
+- Alias records are used to route the domain to **CloudFront** and supporting service endpoints (such as the ALB).
 
 ---
 
