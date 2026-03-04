@@ -281,7 +281,7 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 ## Walkthrough
 
 
-## 1. AWS Organizations, Organizational Units, and Access
+##1. AWS Organizations, Organizational Units, and Access
 
 ### AWS Organizations (OUs + accounts)
 ![AWS Organizations & OUs](images/resources/AWSorganization.png)
@@ -314,7 +314,7 @@ This screenshot also includes the **Security Group** for the Systems Manager VPC
 
 > Note: Session Manager activity is also logged for accountability.
 
-## 2. VPC, Subnets, Endpoints, Routing, SG
+##2. VPC, Subnets, Endpoints, Routing, SG
 
 ### VPC (addressing plan)
 ![AWS VPC](images/resources/myvpc.png)
