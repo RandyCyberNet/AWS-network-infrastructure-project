@@ -281,9 +281,9 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 ## Walkthrough
 
 
-##1. AWS Organizations, Organizational Units, and Access
+## 1. AWS Organizations, Organizational Units, and Access
 
-### AWS Organizations (OUs + accounts)
+### AWS Organizations OUs + accounts
 ![AWS Organizations & OUs](images/resources/AWSorganization.png)
 ![AWS Access Portal For New User](images/resources/AWSaccessportal.png)
 ![New User created with admin permissions](images/resources/ARandyMultiUser.png)
@@ -313,6 +313,8 @@ This screenshot also includes the **Security Group** for the Systems Manager VPC
 - In a production environment, this rule would be tightened to allow traffic only from the specific **instance security groups** and/or **subnets** that require Systems Manager access, rather than the entire VPC CIDR range.
 
 > Note: Session Manager activity is also logged for accountability.
+
+---
 
 ##2. VPC, Subnets, Endpoints, Routing, SG
 
@@ -393,6 +395,7 @@ Route tables were created and associated per subnet tier to support intended tra
 
 > Note: Routes are scoped by subnet role to avoid giving all subnets unrestricted internet paths.
 
+---
 
 ## 3. Edge Delivery: Route 53 + CloudFront + WAF
 
@@ -422,6 +425,7 @@ This screenshot confirms:
 - The TLS certificate is valid
 - The page loads successfully (currently hosting portfolio content)
 
+---
 
 ## 4. Application Tier: ALB + EC2
 
@@ -498,6 +502,7 @@ The target group attached to the ALB contains the backend EC2 target, webapp1 on
 - They provide a clean way to route traffic to specific backend services.
 - They support health checks and make it easier to scale/replace backend instances without changing the ALB configuration.
 
+---
 
 ## 5. Data Layer: RDS + S3 + ElastiCache
 
