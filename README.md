@@ -293,7 +293,7 @@ This screenshot shows the **OU structure** and the initial accounts created to s
 - **Shared Network Services** account used for shared infrastructure components (networking/security foundations).
 - A single administrative identity (**A.Randy.multi**) is used instead of relying on the root user for day-to-day work (aligned with AWS best practices).
 
----
+
 
 ### Systems Manager access (why I used it)
 ![Fleet Manager](images/resources/fleetManager.png)
@@ -304,7 +304,7 @@ I chose **AWS Systems Manager** to centralize instance management and reduce exp
 - Improves **auditability** by recording who accessed which instance and when.
 - Supports **patch management** and operational tasks from a centralized console/workflow.
 
----
+
 
 ### VPC Endpoint Security Group (SSM connectivity)
 ![SSM VPC endpoint](images/resources/SGVPCEndpoint.png)
