@@ -118,6 +118,9 @@ This project documents both the **current implemented AWS foundation** and the *
 ### Private-origin hardening (cost vs security model)
 - Implement the **CloudFront VPC Origin model** (private origin access) as a future improvement; current build uses **NAT** for cost reasons
 
+---
+
+---
 
 
 ## Architecture
@@ -586,6 +589,9 @@ The final screenshot confirms successful connectivity from a private EC2 instanc
 - Then I used `redis-cli` to connect and set a test value, using this command:
 **redis-cli --tls -h <endpointname> -p 6379**
 
+---
+
+---
 
 ## Future Enhancements
 
