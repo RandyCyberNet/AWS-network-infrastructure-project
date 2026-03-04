@@ -14,8 +14,6 @@ A secure, scalable cloud network architecture for a small-to-medium organization
   - [3. Edge Delivery: Route 53 + CloudFront + WAF](#3-edge-delivery-route-53--cloudfront--waf)
   - [4. Application Tier: ALB + EC2](#4-application-tier-alb--ec2)
   - [5. Data Layer: RDS + S3 + ElastiCache](#5-data-layer-rds--s3--elasticache)
-  - [6. Automation: EventBridge + Lambda - In Progress](#6-automation-eventbridge--lambda-in-progress)
-  - [7. Monitoring & Audit - Planned Enhancements](#7-monitoring--audit-planned-enhancements)
 - [Future Enhancements](#future-enhancements)
 
 ---
@@ -511,7 +509,7 @@ The final screenshot confirms that S3 access controls are working as intended:
 
 ### ElastiCache (Redis OSS) overview
 ![ElastiCache](images/resources/ElastiCache.png)
-The first screenshot shows the **Redis OSS cache** and the subnet associations aligned to the private application tier (the same private subnets used by the EC2 instances). This keeps cache traffic internal to the VPC and reduces exposure.
+The first screenshot shows the **Redis OSS cache** and the subnet associations aligned to the private application tier (the same private subnets used by the EC2 instances). This keeps cache traffic internal to the VPC, reduces exposure and costs!
 
 ---
 ### Redis security group (restricted access)
