@@ -411,7 +411,7 @@ The first screenshot shows the Application Load Balancer **`ALB-webapp1`** and t
 ---
 ### ALB inbound rules (HTTPS from CloudFront)
 ![ALB Inbound Security Group](images/resources/ALBinboundSG.png)
-The inbound rules are scoped to allow **HTTPS (443)** traffic **from CloudFront**.
+The inbound rules are scoped to allow **HTTPS (443)** traffic **originating from CloudFront**.
 
 **Why this is configured**
 - CloudFront is the public edge entry point, so TLS/HTTPS is enforced for secure client connections.
@@ -454,7 +454,6 @@ The target group attached to the ALB contains the backend EC2 target, webapp1 on
 -example of one of the policies created for putting objects only, used for the lambda function
 ![S3 example policy](images/resources/proofS3policy.png)
 
-![S3 policy restricting access](images/resources/proofS3policy.png)
 
 
 
