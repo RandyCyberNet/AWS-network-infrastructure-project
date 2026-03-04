@@ -442,26 +442,96 @@ The target group attached to the ALB contains the backend EC2 target, webapp1 on
 
 ## 5. Data Layer: RDS + S3 + ElastiCache
 
-### AWS RDS (Databases)
+### RDS (PostgreSQL databases)
 ![Databases](images/resources/allDBS.png)
+The first screenshot shows the PostgreSQL RDS databases created for this project.
+
+**Design note**
+- In a full production environment, this design would typically be expanded to include additional databases (or clusters) to support workload separation (e.g., separate databases for each web application and for business operations, plus redundancy/DR controls).
+- For this phase, I implemented a smaller footprint to keep cost and scope reasonable while validating the core architecture.
+
+---
+
+### RDS security groups (least privilege access)
 ![Database inbound rule](images/resources/DBinboundSG.png)
+The inbound rules for the web application database allow:
+- **PostgreSQL (TCP 5432)** inbound
+- **Source restricted to the `web-app1` Security Group**
+  
+**Why this matters**
+- The database is not open to the VPC or the internet.
+- Only instances/services that are members of the `web-app1` security group can connect, which enforces least privilege at the network layer.
+
+---
+### Connectivity validation (EC2 → RDS using Systems Manager)
 ![EC2 Connection to PostgreSQL](images/resources/proofconnectionToDBS.png)
+The final screenshot confirms successful connectivity from the private EC2 instance to the private RDS database:
+- I accessed the EC2 instance using **AWS Systems Manager Session Manager**
+- From that session, I connected to RDS using:
+```bash
+psql -h <RDS-ENDPOINT> -U <USERNAME> -d <DATABASE_NAME>
 
+---
 
-### AWS S3 Buckets
+### S3 buckets (purpose and separation)
 ![S3 Buckets](images/resources/allBuckets.png)
+The first screenshot shows **5 S3 buckets** in the account. One bucket was automatically created/used by **Systems Manager**, and the remaining **4 buckets** were created for this project to separate workloads and reduce blast radius:
 
--example of one of the policies created for putting objects only, used for the lambda function
+- **Web application buckets**
+  - `org-web1-s3` (primary bucket for WebApp1-related storage)
+  - `bak-web1-s3` (backup/redundancy bucket)
+
+- **Business operations buckets**
+  - `org-business-operations-s3` (primary bucket for business/operations data)
+  - `bak-business-operations-s3` (backup/redundancy bucket)
+
+This separation supports least privilege by ensuring web application workflows do not require access to business operations storage and vice versa.
+
+---
+### Bucket policies (least privilege enforcement)
+![S3 example policy](images/resources/proofS3JSON.png)
+The second screenshot shows an example **S3 bucket policy** used to scope access by workload. In general, these policies are designed so that:
+- WebApp1 resources can interact only with the specific web application bucket(s) they need
+- Access to unrelated buckets (e.g., business operations buckets) is denied
+- Mainly, this access model will be used by the **IOC ingestion workflow** (Lambda function) so ingestion can write to the appropriate bucket (e.g., `org-web1-s3`) without having access to other buckets.
+
+
+**Why I highlighted bucket listing in the example:**  
+In the screenshot example, I intentionally tested bucket listing to illustrate that **without explicit IAM and bucket policy controls**, a workload can end up with broader S3 visibility/access than intended. The policies in this project are therefore designed to **remove unnecessary S3 permissions** and keep access limited to the buckets required for the workload.
+
+---
+
+### Access validation (EC2 → S3)
 ![S3 example policy](images/resources/proofS3policy.png)
+The final screenshot confirms that S3 access controls are working as intended:
+- I connected to the EC2 instance using **AWS Systems Manager**
+- From the instance, I used AWS CLI commands to verify access, for example:
+```bash
+aws s3 ls s3://org-web1-s3
 
+---
 
-
-
-### AWS ElastiCache using Redis OSS
+### ElastiCache (Redis OSS) overview
 ![ElastiCache](images/resources/ElastiCache.png)
-![ElastiCache Inbound Security Group](images/resources/ElastiCacheInboundSG.png)
-![EC2 Connection to Redis OSS](images/resources/proofconnectionToCache.png)
+The first screenshot shows the **Redis OSS cache** and the subnet associations aligned to the private application tier (the same private subnets used by the EC2 instances). This keeps cache traffic internal to the VPC and reduces exposure.
 
+---
+### Redis security group (restricted access)
+![ElastiCache Inbound Security Group](images/resources/ElastiCacheInboundSG.png)
+The second screenshot shows the Redis security group rules:
+- **Inbound TCP 6379** is allowed **only** from the web application tier (EC2) network range/security boundary.
+- This ensures Redis is not reachable broadly from other subnets or public sources.
+
+> From experience, it’s even cleaner to set the Redis inbound source to the **EC2 Security Group** instead of a CIDR range, so only the intended instances can connect even if subnets change.
+
+---
+### Connectivity validation (EC2 → Redis using Systems Manager)
+![EC2 Connection to Redis OSS](images/resources/proofconnectionToCache.png)
+The final screenshot confirms successful connectivity from a private EC2 instance to Redis:
+- I connected to the EC2 instance via **AWS Systems Manager (SSM)**
+- Then I used `redis-cli` to connect and set a test value:
+```bash
+redis-cli --tls -h <endpointname> -p 6379
 
 
 ## 6. Automation: EventBridge + Lambda - In Progress
