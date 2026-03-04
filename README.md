@@ -467,9 +467,8 @@ The inbound rules for the web application database allow:
 ![EC2 Connection to PostgreSQL](images/resources/proofconnectionToDBS.png)
 The final screenshot confirms successful connectivity from the private EC2 instance to the private RDS database:
 - I accessed the EC2 instance using **AWS Systems Manager Session Manager**
-- From that session, I connected to RDS using:
-```bash
-psql -h <RDS-ENDPOINT> -U <USERNAME> -d <DATABASE_NAME>
+- From that session, I connected to RDS using this command:
+**psql -h <RDS-ENDPOINT> -U <USERNAME> -d <DATABASE_NAME>**
 
 ---
 
@@ -505,9 +504,8 @@ In the screenshot example, I intentionally tested bucket listing to illustrate t
 ![S3 example policy](images/resources/proofS3policy.png)
 The final screenshot confirms that S3 access controls are working as intended:
 - I connected to the EC2 instance using **AWS Systems Manager**
-- From the instance, I used AWS CLI commands to verify access, for example:
-```bash
-aws s3 ls s3://org-web1-s3
+- From the instance, I used AWS CLI commands to verify access, for example I used this command:
+**aws s3 ls s3://org-web1-s3**
 
 ---
 
@@ -529,20 +527,17 @@ The second screenshot shows the Redis security group rules:
 ![EC2 Connection to Redis OSS](images/resources/proofconnectionToCache.png)
 The final screenshot confirms successful connectivity from a private EC2 instance to Redis:
 - I connected to the EC2 instance via **AWS Systems Manager (SSM)**
-- Then I used `redis-cli` to connect and set a test value:
-```bash
-redis-cli --tls -h <endpointname> -p 6379
+- Then I used `redis-cli` to connect and set a test value, using this command:
+**redis-cli --tls -h <endpointname> -p 6379**
 
 
-## 6. Automation: EventBridge + Lambda - In Progress
+## Future Enhancements
+
+### Automation: EventBridge + Lambda - In Progress
 
 ![Event Bridge, created schedule](images/resources/Evenbridgeschedule.png)
 
 
-## 7. Monitoring & Audit - Planned Enhancements
+### Monitoring & Audit - Planned Enhancements
 
 - note some resources and instances already have monitoring and logging enabled, however, the idea is to create a more centralized location of all auditing, monitoiring, troubleshooting and security actions
-![DNS Records](images/resources/ALB.png)
-
-
-## Future Enhancements
