@@ -105,15 +105,15 @@ This project documents both the **current implemented AWS foundation** and the *
 ### More secure patch/template sourcing (reducing NAT dependency)
 - Introduce a **hardened “workforce”/patch-fetcher system** connected to the AWS environment via **VPN** (or equivalent secure access path)
 - This system acts as a controlled downloader for OS patches, application templates, and required dependencies
-- Downloaded artifacts are stored in a dedicated **S3 bucket** and made available to **WebApp1** via tightly scoped policies and/or **S3 Access Points**
+- Downloaded artifacts are stored in a dedicated **S3 bucket** and made available to **WebApp1** (the webserver) via tightly scoped policies and/or **S3 Access Points**
 - This reduces direct internet retrieval from application servers and supports stronger supply-chain controls
 
 ### Granular storage access
 - **S3 Access Points**: enforce workload- and application-specific access boundaries at scale (beyond bucket-level policies)
 
 ### IOC ingestion + serving layer
-- Complete ingestion workflow: **EventBridge → Lambda → S3 (raw snapshots) → DynamoDB (serving lookup layer)**
-- (Optional) **DynamoDB Global Tables / multi-region expansion** as the SaaS scales
+- Complete ingestion workflow: **EventBridge → Lambda → S3 (raw snapshots) → AWS RDS Database**
+- (Optional) maybe switch to **DynamoDB Global Tables / multi-region expansion** as the SaaS scales
 
 ### Private-origin hardening (cost vs security model)
 - Implement the **CloudFront VPC Origin model** (private origin access) as a future improvement; current build uses **NAT** for cost reasons
