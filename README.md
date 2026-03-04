@@ -366,18 +366,78 @@ This screenshot confirms:
 
 ## 4. Application Tier: ALB + EC2
 
-### EC2 Instances & Security Groups
+### EC2 instances (private subnets)
 ![EC2 Main Instance](images/resources/EC2webapp.png)
 ![EC2 Back-up Instance](images/resources/EC2bakwebapp.png)
+
+The first screenshot shows the **primary EC2 instance** hosting the web application in the private subnet **`11.0.0.0/24`**.  
+The second screenshot shows a **secondary EC2 instance** in **`11.0.1.0/24`** (separate AZ) created for resiliency.
+**How the secondary instance was built (AMI-based)**
+- I created an **AMI (Amazon Machine Image)** from the primary instance to capture the OS, configuration, and application files/directories.
+- The AMI was then used to launch the secondary instance as a consistent, repeatable “golden image” approach.
+> Note: This is a simple resilience method for a lab build. In a production SaaS, this would typically evolve into Auto Scaling, CI/CD image pipelines, and immutable deployments.
+
+---
+
+### Inbound traffic (from ALB only)
 ![EC2 Inbound Security Groups](images/resources/EC2inboundSG.png)
+Inbound rules are scoped for **HTTP (port 80)** with the **source restricted to the Application Load Balancer**.
+
+**Why HTTP is used between ALB and EC2**
+- ALB ↔ EC2 traffic stays **inside the VPC**, not over the public internet.
+- End-user traffic is still protected with **HTTPS at the edge (CloudFront/TLS)**.
+- This design keeps the internal communication simple while maintaining encrypted user-facing access.
+
+---
+
+### Outbound traffic (controlled egress)
 ![EC2 Outbound Security Groups](images/resources/EC2outboundSG.png)
+Outbound rules are configured to allow only required destinations/services for the web application tier, including:
+- **HTTPS (443) to VPC CIDR `11.0.0.0/16`** for access to internal services such as Systems Manager connectivity paths (where applicable)
+- **TCP 6379** to **ElastiCache (Redis OSS)** for cache communication
+- **TCP 5432** to **Amazon RDS (PostgreSQL)** for database connectivity
+- **HTTP/HTTPS (80/443) to `0.0.0.0/0`** for outbound internet access (updates, patching, required downloads) via NAT Gateway
+
+**Security note**
+- In a production environment, broad outbound internet access (`0.0.0.0/0`) should be reduced further (e.g., allowlisting, time-bound access, or a controlled patch/template pipeline). This aligns with the project roadmap to reduce direct internet dependency from application servers.
+
+---
 
 ### Application Load Balancer & Security Groups
+### ALB overview
 ![Application Load Balancer](images/resources/ALB.png)
-![ALB Inbound Security Group](images/resources/ALBinboundSG.png)
-![ALB Outbound Security Group](images/resources/ALBoutboundSG.png)
-![Target Groups For ALB](images/resources/TargetGroupsForALB.png)
+The first screenshot shows the Application Load Balancer **`ALB-webapp1`** and the **Availability Zones** it is associated with. Placing the ALB across multiple AZs supports higher availability and helps avoid single-AZ dependency.
 
+---
+### ALB inbound rules (HTTPS from CloudFront)
+![ALB Inbound Security Group](images/resources/ALBinboundSG.png)
+The inbound rules are scoped to allow **HTTPS (443)** traffic **from CloudFront**.
+
+**Why this is configured**
+- CloudFront is the public edge entry point, so TLS/HTTPS is enforced for secure client connections.
+- Restricting inbound traffic only allowing CloudFront, reduces exposure and limits who can reach the ALB directly.
+
+> Note: In a hardened design, the ALB can be kept fully private and reachable only through CloudFront (e.g., VPC Origin model). This project documents that as a future enhancement.
+
+---
+
+### ALB outbound rules (HTTP to EC2 targets)
+![ALB Outbound Security Group](images/resources/ALBoutboundSG.png)
+Outbound rules allow the ALB to communicate with the backend EC2 instances over **HTTP (80)**.
+
+**Why HTTP is used between ALB and EC2**
+- ALB → EC2 traffic remains inside the VPC.
+- TLS is enforced at the edge (CloudFront), while internal traffic is kept simple and controlled via Security Groups.
+
+---
+
+### Target group (where the ALB sends traffic)
+![Target Groups For ALB](images/resources/TargetGroupsForALB.png)
+The target group attached to the ALB contains the backend EC2 target, webapp1 on port **80/HTTP**. This is how the ALB knows **where to route requests**.
+
+**Why target groups matter**
+- They provide a clean way to route traffic to specific backend services.
+- They support health checks and make it easier to scale/replace backend instances without changing the ALB configuration.
 
 
 ## 5. Data Layer: RDS + S3 + ElastiCache
