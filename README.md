@@ -8,7 +8,7 @@ A secure, scalable cloud network architecture for a small-to-medium organization
   - [Implemented Currently](#implemented-currently)
   - [Planned or Future Implementations](#planned-future-implementations)
 - [Architecture](#architecture)
-- [Walkthrough](#walkthrough-screenshots)
+- [Walkthrough](#walkthrough)
   - [1. AWS Organizations, Organizational Units, and Access](#1-aws-organizations--ous)
   - [2. VPC, Subnets, Endpoints, Routing, SG](#2-vpc-subnets-routing)
   - [3. Edge Delivery: Route 53 + CloudFront + WAF](#3-edge-delivery-route-53--cloudfront--waf)
@@ -277,7 +277,7 @@ Model 2 was deferred to keep project cost lower during the initial build. The cu
 ---
 
 ---
-
+<a id="walkthrough"></a>
 ## Walkthrough
 
 
